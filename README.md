@@ -11,7 +11,7 @@ All messages contain the current round number (Unix epoch time).  Delayed messag
 
 ## Phase Zero
 
-Nothing happens in the first 100ms of each round.  This slack is used to improve the probability of servers agreeing on the time.
+Nothing happens in the first 100ms of each round.  This slack is used to improve the probability of servers agreeing on the epoch time to near 100%.
 
 
 ## Phase One
@@ -25,7 +25,7 @@ A ProtoConsensus contains a reference to the preceeding consensus and one or mor
 
 (If the leader has no log entries to add, there is no need for a consensus this round.)
 
-The leader sends the ProtoConsensus to the other servers.
+At the start of the phase, the leader sends the ProtoConsensus to the other servers.
 ```
 {
         "protoconsensus": {
@@ -39,7 +39,7 @@ The leader sends the ProtoConsensus to the other servers.
 }
 ```
 
-The other servers reply with a Vote, if they agree that it is valid.
+The other servers may reply with a Vote, if they agree that it is valid.
 ```
 {
         "vote": {
@@ -51,7 +51,7 @@ The other servers reply with a Vote, if they agree that it is valid.
 
 ## Phase Two
 
-At 700ms, the leader counts the received votes.  If more than 50% of the servers have voted for the ProtoConsensus, then the leader publishes the Consensus.
+At the starte of Phase Two, the leader counts the received votes.  If more than 50% of the servers have voted for the ProtoConsensus, then the leader publishes the Consensus.
 ```
 {
         "consensus": {
@@ -71,7 +71,7 @@ At 700ms, the leader counts the received votes.  If more than 50% of the servers
 
 A round duration of at least one second is required to allow 100ms NTP slack and three 200ms one-way internet trips.
 
-On a LAN, with better NTP and shorter trips, 200ms rounds might be possible.
+(On a LAN, with better NTP and shorter trips, 200ms rounds might be possible.)
 
 This granularity makes Chronsensus unsuitable for many use cases.  STICK has a typical latency of 1-2 seconds between submitting a log entry and receiving confirmation of a durable write.
 
@@ -80,7 +80,7 @@ This granularity makes Chronsensus unsuitable for many use cases.  STICK has a t
 
 If a non-leader receives a ProtoConsensus, which references a Consensus which it has missed, it must catch up.
 
-If a leader has missed a consensus, which the majority have received, the ProtoConsensus which it send will contain an stale reference and so will not be voted for by the majority of servers.  There will be no consensus that round.
+If a leader has missed a consensus (which the majority have received) the ProtoConsensus which it sends will contain an stale reference.  It will not be voted for by the majority of servers.  There will be no consensus that round.
 
 
 ## Failed Servers
@@ -92,9 +92,7 @@ It is expected that there will be many servers.  Individual server failure will 
 
 ## Clients
 
-Clients send log entries to the next round's leader, for incorporation into the next consensus.
-
-Clients will continue to send log entries to each round's leader until they see a consensus containing the log entry.
+Clients' log entries are forwarded to the next round's leader, for incorporation into the next consensus.
 
 
 ## Adding and Removing Servers

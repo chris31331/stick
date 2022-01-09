@@ -13,7 +13,7 @@ All messages contain the current round number (Unix epoch time).  Delayed messag
 
 ## Round Leader
 
-One of the servers is the leader for each round.  The choice of leader is deterministic, based which ```hash(leader address ++ round number)``` is lowest for the current round.  All servers can calculate the leader's identity.  This is [Consistent Hashing](https://en.wikipedia.org/wiki/Consistent_hashing).
+One of the servers is the leader for each round.  The choice of leader is deterministic, based which ```hash(leader address ++ round number)``` is lowest for the current round.  All servers can calculate the leader's identity.  This is form of [Consistent Hashing](https://en.wikipedia.org/wiki/Consistent_hashing), as small changes to the set of servers is unlikely to change the leader for a particular round.
 
 
 ## Phase Zero

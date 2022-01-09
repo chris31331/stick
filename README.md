@@ -2,7 +2,7 @@
 
 STICK is a Distributed Consensus Protocol, like PAXOS and RAFT.
 
-Time is divided into rounds, typically one second long.  All servers maintain their time, using NTP, to an accuracy of tens of milliseconds.
+Time is divided into rounds, typically one second long.  All servers maintain their time using NTP, to an accuracy of tens of milliseconds.
 
 Servers are identified by their static internet IP address.
 
@@ -32,7 +32,7 @@ The leader sends the ProtoConsensus to the other servers.
                 "round": 5,
                 "leader": "1.2.3.4",
                 "last_consensus": {"round": 4, "hash":"d86e21cc..."},
-                "log": [
+                "log_entries": [
                         {"add": {"foo": "bar"}},
                 ]
         }
@@ -73,7 +73,7 @@ A round duration of at least one second is required to allow 100ms NTP slack and
 
 On a LAN, with better NTP and shorter trips, 200ms rounds might be possible.
 
-This granularity makes Chronsensus unsuitable for many, but not all, use cases.
+This granularity makes Chronsensus unsuitable for many use cases.  STICK has a typical latency of 1-2 seconds between submitting a log entry and receiving confirmation of a durable write.
 
 
 ## Missed Consensuses
@@ -99,5 +99,5 @@ Clients will continue to send log entries to each round's leader until they see 
 
 ## Adding and Removing Servers
 
-The address of a server to be added or removed can be contained in a ProtoConsensus's log.  A leader will only incorporate a membership change into a ProtoConsensus when it does not change the order of leaders in the near future.
+The address of a server to be added or removed can be contained in a ProtoConsensus's log_entries.  A leader will only incorporate a membership change into a ProtoConsensus when it does not change the order of leaders in the near future.
 

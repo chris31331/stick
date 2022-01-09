@@ -6,7 +6,7 @@ Time is divided into rounds, typically one second long.  All servers maintain th
 
 Servers are identified by their static internet IP address.
 
-All messages contain the round number.  Delayed messages are discarded.
+All messages contain the current round number (Unix epoch time).  Delayed messages are discarded.
 
 
 ## Phase Zero
@@ -16,7 +16,7 @@ Nothing happens in the first 100ms of each round.  This slack is used to improve
 
 ## Phase One
 
-In this phase, one of the servers is the leader.  The choice of leader is deterministic, based which hash(leader address ++ round number) is lowest for the current round.  All servers can calculate the leader's identity.  This is Convergent Hashing.
+In this phase, one of the servers is the leader.  The choice of leader is deterministic, based which ```hash(leader address ++ round number)``` is lowest for the current round.  All servers can calculate the leader's identity.  This is Convergent Hashing.
 
 
 ### Proto Consensus

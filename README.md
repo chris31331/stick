@@ -1,4 +1,4 @@
-# Simple Time Interval Consensus Keys
+# Simple Time Interval Consensus Kludge
 
 STICK is a Distributed Consensus Protocol, like PAXOS and RAFT.
 
